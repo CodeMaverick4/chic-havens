@@ -1,0 +1,58 @@
+body {
+  margin: 0px;
+  font-family: serif !important;
+}
+h1,h2,h3,h4,h5,h6{
+  margin: 0px !important;
+}
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* border-bottom: 2px solid black; */
+  padding: 10px 20px
+}
+
+.button {
+  border: 2px solid black;
+  padding: 7px 20px;
+  background: transparent;
+  transition: all 0.3s ease-in-out;
+}
+.button:hover{
+  background-color: black;
+  color: white;
+}
+.banner-height{
+  height: 250px;
+}
+.banner-height img{
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+.search-input-icon{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.search-input{
+  border: 2px solid purple !important;
+  padding: 10px;
+  outline: none !important;
+}
+.search-input:focus-within{
+  border: 2px solid orange !important;
+  /* border-color: yellow; */
+}
+.card{
+  border: 1px dotted purple;
+  padding: 10px; 
+}
+.card button{
+  border: none;
+  background-color: rgb(190 71 217);;
+  padding: 10px;
+  color: white;
+  border-radius: 10px;
+}
