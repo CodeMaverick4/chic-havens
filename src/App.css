@@ -2,9 +2,48 @@ body {
   margin: 0px;
   font-family: serif !important;
 }
-h1,h2,h3,h4,h5,h6{
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0px !important;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.modal-css {
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background: rgb(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-cross-icon {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+
+}
+
+.error-msg {
+  font-weight: 500;
+  font-size: 10px;
+  margin-top: 5px;
+  color: red
+}
+
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -18,41 +57,222 @@ h1,h2,h3,h4,h5,h6{
   padding: 7px 20px;
   background: transparent;
   transition: all 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
-.button:hover{
+
+.button:hover {
   background-color: black;
   color: white;
 }
-.banner-height{
+
+.banner-height {
   height: 250px;
 }
-.banner-height img{
+
+.banner-height img {
   height: 100%;
   width: 100%;
   object-fit: contain;
 }
-.search-input-icon{
+
+.search-input-icon {
   position: absolute;
   top: 10px;
   right: 10px;
 }
-.search-input{
+
+.search-input {
   border: 2px solid purple !important;
   padding: 10px;
   outline: none !important;
 }
-.search-input:focus-within{
+
+.search-input:focus-within {
   border: 2px solid orange !important;
   /* border-color: yellow; */
 }
-.card{
-  border: 1px dotted purple;
-  padding: 10px; 
+
+
+
+.footer {
+  color: white;
+  background-color: black;
+  margin-top: 30px;
 }
-.card button{
+
+.footer div {
+  border-top: 2px solid white;
+  border-bottom: 2px solid white;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.footer div span {
+  border: 1px solid white;
+  padding: 10px 15px;
+}
+
+.product-card {
+  border: 2px solid transparent;
+  padding: 10px 10px 20px 10px;
+  border-image: repeating-linear-gradient(45deg,
+      black 0 10px,
+      transparent 10px 20px) 10;
+      /* width: 325px; */
+}
+
+.product-card-img-wrapper {
+  height: 400px;
+  width: 300px;
+}
+
+.product-card button {
   border: none;
-  background-color: rgb(190 71 217);;
+  background-color: rgb(190 71 217);
+  ;
   padding: 10px;
   color: white;
   border-radius: 10px;
+}
+
+.product-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+.product-card-icon {
+  position: absolute;
+  top: 50%;
+  font-size: 24px;
+  translate: 0% -50%;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.product-card-icon-left {
+  left: 0px;
+}
+
+.product-card-icon-right {
+  right: 0px;
+}
+
+.filter-select {
+  padding: 10px;
+  outline: none;
+  border: 2px solid purple;
+}
+
+.filter-select :focus {
+  border: 2px solid orange;
+}
+
+.sort-by-icon {
+  padding: 7px;
+  border: 1px solid black;
+}
+
+.sort-by-icon active {
+  background-color: black;
+}
+
+.cart {
+  position: absolute;
+  border: 2px solid black;
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  right: 0px;
+  top: 50px;
+  width: 450px;
+  z-index: 100;
+}
+
+.cart-quantity {
+  display: flex;
+}
+
+.cart-quantity span {
+  padding: 5px 10px;
+  border: 1px solid black;
+}
+
+.cart button {
+  padding: 5px;
+  border-radius: 10px;
+  background-color: lightcoral;
+  margin-top: 10px;
+}
+
+/* -----------------------------------  */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 250px;
+  margin: auto;
+}
+
+.login-input {
+  padding: 0.5rem;
+  border: 2px solid purple;
+  border-radius: 6px;
+  outline: none;
+}
+
+.login-input:focus {
+  border-color: orange;
+}
+
+.login-btn {
+  padding: 0.6rem;
+  background: purple;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.login-btn:hover {
+  background: orange;
+}
+
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.signup-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.signup-btn {
+  background: black;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+}
+
+@media (max-width:768px) {
+  .button {
+    display: none !important
+  }
 }
