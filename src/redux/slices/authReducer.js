@@ -10,13 +10,21 @@ const AuthReducer = createSlice({
             const userData = {
                 uid: action.payload.uid,
                 email: action.payload.email,
-                name: action.payload.displayName || "",
-                photo: action.payload.photoURL || "",
-                token: action.payload.token, 
+                name: action.payload.name || "",
+                photo: action.payload.photo || "",
+                token: action.payload.token,
+                chatId: action.payload.chatId || null,
             };
 
             localStorage.setItem("auth", JSON.stringify(userData));
             return userData;
+        },
+
+        updateChatId: (state, action) => {
+            if (!state) return state;
+            const updatedUser = { ...state, chatId: action.payload };
+            localStorage.setItem("auth", JSON.stringify(updatedUser));
+            return updatedUser;
         },
 
         logout: () => {
@@ -27,4 +35,4 @@ const AuthReducer = createSlice({
 });
 
 export default AuthReducer.reducer;
-export const { login, logout } = AuthReducer.actions;
+export const { login, logout,updateChatId } = AuthReducer.actions;

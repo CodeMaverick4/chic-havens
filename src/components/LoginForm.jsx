@@ -3,12 +3,16 @@ import { useDispatch } from "react-redux";
 import { login } from "../redux/slices/authReducer";
 import axios from "axios";
 import { toggleModal } from "../redux/slices/modalReducer";
+import { db } from "../firebase";
+import { ref, get, push, set } from "firebase/database";
 
 const LoginForm = () => {
     const dispatch = useDispatch();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const validateField = (name, value) => {
         let message = "";
@@ -31,7 +35,6 @@ const LoginForm = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        // fresh validation
         const newErrors = {};
         if (!email) newErrors.email = "Email is required";
         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
@@ -47,69 +50,171 @@ const LoginForm = () => {
         }
 
         try {
-            const API_KEY = import.meta.env.VITE_APIKEY; // check .env spelling
+            setLoading(true);
+            const API_KEY = import.meta.env.VITE_APIKEY;
+
             const res = await axios.post(
                 `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`,
                 { email, password, returnSecureToken: true }
             );
 
-            if (res.data.error) {
-                throw new Error(res.data.error.message);
+            const uid = res.data.localId;
+            const token = res.data.idToken;
+
+            const userRef = ref(db, `users/${uid}`);
+            const snapshot = await get(userRef);
+
+            let chatId;
+
+            if (snapshot.exists() && snapshot.val().chatId) {
+                chatId = snapshot.val().chatId;
+            } else {
+                const newChatRef = push(ref(db, "chic-havens-enquiries"));
+                chatId = newChatRef.key;
+
+                await set(ref(db, `chic-havens-enquiries/${chatId}`), {
+                    user: { uid, email, createdAt: Date.now() },
+                    messages: {},
+                });
+
+                await set(userRef, {
+                    email,
+                    chatId,
+                    createdAt: Date.now(),
+                });
             }
 
-            const user = {
-                uid: res.data.localId,
-                email: res.data.email,
-                token: res.data.idToken,
-            };
-
+            const user = { uid, email, token, chatId };
             dispatch(login(user));
             dispatch(toggleModal(null));
+
             setPassword("");
             setEmail("");
             setErrors({});
         } catch (err) {
+            console.error("Login error:", err);
             setErrors({
-                general: err.message || "Login failed",
+                general: err.response?.data?.error?.message || "Invalid credentials. Please try again.",
             });
+        } finally {
+            setLoading(false);
         }
     };
 
-
     return (
-        <form className="login-form" onSubmit={handleLogin}>
-            <label>Email</label>
-            <input
-                type="email"
-                value={email}
-                onChange={(e) => {
-                    setEmail(e.target.value);
-                    validateField("email", e.target.value);
-                }}
-                className="login-input"
-            />
-            {errors.email && <p className="error-msg">{errors.email}</p>}
+        <div className="login-form-container">
+            {/* Header */}
+            <div className="text-center mb-4">
+                <h3 className="fw-bold mb-2">Welcome Back</h3>
+                <p className="text-muted small mb-0">Sign in to your account to continue</p>
+            </div>
 
-            <label>Password</label>
-            <input
-                type="password"
-                value={password}
-                onChange={(e) => {
-                    setPassword(e.target.value);
-                    validateField("password", e.target.value);
-                }}
-                className="login-input"
-            />
-            {errors.password && <p className="error-msg">{errors.password}</p>}
+            {/* Form */}
+            <form onSubmit={handleLogin}>
+                {/* Email Field */}
+                <div className="mb-3">
+                    <label className="form-label fw-semibold small">Email Address</label>
+                    <div className="input-group">
+                        <span className="input-group-text bg-light border-end-0">
+                            <i className="bi bi-envelope text-muted"></i>
+                        </span>
+                        <input
+                            type="email"
+                            className={`form-control border-start-0 ${errors.email ? 'is-invalid' : ''}`}
+                            placeholder="you@example.com"
+                            value={email}
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                                validateField("email", e.target.value);
+                            }}
+                            disabled={loading}
+                        />
+                    </div>
+                    {errors.email && (
+                        <div className="text-danger small mt-1">
+                            <i className="bi bi-exclamation-circle me-1"></i>
+                            {errors.email}
+                        </div>
+                    )}
+                </div>
 
-            {errors.general && <p className="error-msg">{errors.general}</p>}
+                {/* Password Field */}
+                <div className="mb-3">
+                    <label className="form-label fw-semibold small">Password</label>
+                    <div className="input-group">
+                        <span className="input-group-text bg-light border-end-0">
+                            <i className="bi bi-lock text-muted"></i>
+                        </span>
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            className={`form-control border-start-0 border-end-0 ${errors.password ? 'is-invalid' : ''}`}
+                            placeholder="Enter your password"
+                            value={password}
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                                validateField("password", e.target.value);
+                            }}
+                            disabled={loading}
+                        />
+                        <span 
+                            className="input-group-text bg-light border-start-0 cursor-pointer"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            <i className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'} text-muted`}></i>
+                        </span>
+                    </div>
+                    {errors.password && (
+                        <div className="text-danger small mt-1">
+                            <i className="bi bi-exclamation-circle me-1"></i>
+                            {errors.password}
+                        </div>
+                    )}
+                </div>
 
-            <button type="submit" className="login-btn">
-                Login
-            </button>
+                {/* General Error */}
+                {errors.general && (
+                    <div className="alert alert-danger py-2 px-3 small" role="alert">
+                        <i className="bi bi-x-circle me-2"></i>
+                        {errors.general}
+                    </div>
+                )}
 
-            <span className="cursor-pointer" onClick={() => dispatch(toggleModal('signup'))}>Don't have an Account?</span>
-        </form>
+                {/* Login Button */}
+                <button 
+                    type="submit" 
+                    className="btn btn-primary w-100 py-2 fw-semibold mb-3"
+                    disabled={loading}
+                >
+                    {loading ? (
+                        <>
+                            <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                            Signing in...
+                        </>
+                    ) : (
+                        <>
+                            <i className="bi bi-box-arrow-in-right me-2"></i>
+                            Sign In
+                        </>
+                    )}
+                </button>
+
+                {/* Divider */}
+                <div className="text-center mb-3">
+                    <small className="text-muted">OR</small>
+                </div>
+
+                {/* Sign Up Link */}
+                <div className="text-center">
+                    <span className="text-muted small">Don't have an account? </span>
+                    <span
+                        className="text-primary fw-semibold small cursor-pointer text-decoration-underline"
+                        onClick={() => dispatch(toggleModal("signup"))}
+                    >
+                        Create Account
+                    </span>
+                </div>
+            </form>
+        </div>
     );
 };
 

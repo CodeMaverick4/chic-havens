@@ -1,6 +1,14 @@
 body {
   margin: 0px;
-  font-family: serif !important;
+  /* font-family: serif !important; */
+  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  /* font-family: monospace !important; */
+  /* font-family: 'Nunito Sans', sans-serif !important; */
+  /* Primary Font - Headings & Brands */
+  /* font-family: 'Playfair Display', serif !important; */
+  /* font-family: 'Inter', sans-serif !important; */
+  /* font-family: 'Montserrat', sans-serif !important; */
+  /* font-family: 'Roboto', sans-serif !important; */
 }
 
 h1,
@@ -48,24 +56,79 @@ h6 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* border-bottom: 2px solid black; */
   padding: 10px 20px
+}
+
+/* ==================== Cart Icon Badge ==================== */
+
+.topbar-cart-icon {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.topbar-cart-icon:hover {
+  transform: scale(1.1);
+}
+
+.topbar-cart-icon::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 10px;
+  height: 10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* Purple gradient */
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Hide dot when cart is empty (optional) */
+.topbar-cart-icon.empty::after {
+  display: none;
+}
+
+/* Pulse animation for attention */
+.topbar-cart-icon::after {
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
 }
 
 .button {
   border: 2px solid black;
-  padding: 7px 20px;
+  padding: 5px 15px;
   background: transparent;
   transition: all 0.3s ease-in-out;
   display: flex;
   align-items: center;
   gap: 5px;
-}
-
-.button:hover {
   background-color: black;
   color: white;
+  font-size: small;
+  border-radius: 7px;
 }
+
+/* .button:hover {
+  background-color: black;
+  color: white;
+} */
+
+
 
 .banner-height {
   height: 250px;
@@ -115,52 +178,6 @@ h6 {
   padding: 10px 15px;
 }
 
-.product-card {
-  border: 2px solid transparent;
-  padding: 10px 10px 20px 10px;
-  border-image: repeating-linear-gradient(45deg,
-      black 0 10px,
-      transparent 10px 20px) 10;
-      /* width: 325px; */
-}
-
-.product-card-img-wrapper {
-  height: 400px;
-  width: 300px;
-}
-
-.product-card button {
-  border: none;
-  background-color: rgb(190 71 217);
-  ;
-  padding: 10px;
-  color: white;
-  border-radius: 10px;
-}
-
-.product-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-}
-
-.product-card-icon {
-  position: absolute;
-  top: 50%;
-  font-size: 24px;
-  translate: 0% -50%;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.product-card-icon-left {
-  left: 0px;
-}
-
-.product-card-icon-right {
-  right: 0px;
-}
-
 .filter-select {
   padding: 10px;
   outline: none;
@@ -180,99 +197,1799 @@ h6 {
   background-color: black;
 }
 
-.cart {
+/* ----------------------------------- login form css  */
+/* ==================== Login Form Component Styles ==================== */
+
+.login-form-container {
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* Input focus states */
+.login-form-container .form-control:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.login-form-container .input-group-text {
+  border-color: #dee2e6;
+}
+
+/* Primary button gradient */
+.login-form-container .btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.login-form-container .btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.login-form-container .btn-primary:active {
+  transform: translateY(0);
+}
+
+.login-form-container .btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Cursor pointer utility */
+.cursor-pointer {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.cursor-pointer:hover {
+  opacity: 0.8;
+}
+
+/* Remove input group borders for seamless look */
+.login-form-container .input-group .form-control:focus {
+  z-index: 3;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .login-form-container {
+    padding: 1rem;
+    max-width: 100%;
+  }
+  
+  .login-form-container h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* ==================== Sign Up Form Component Styles ==================== */
+
+.signup-form-container {
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* Input focus states */
+.signup-form-container .form-control:focus {
+  border-color: #28a745;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.signup-form-container .input-group-text {
+  border-color: #dee2e6;
+}
+
+/* Success button gradient */
+.signup-form-container .btn-success {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.signup-form-container .btn-success:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
+.signup-form-container .btn-success:active {
+  transform: translateY(0);
+}
+
+.signup-form-container .btn-success:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Password Strength Indicator */
+.password-strength-bar {
+  flex: 1;
+  height: 4px;
+  background-color: #e9ecef;
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.password-strength-bar.active {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+/* Cursor pointer utility */
+.cursor-pointer {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.cursor-pointer:hover {
+  opacity: 0.8;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .signup-form-container {
+    padding: 1rem;
+    max-width: 100%;
+  }
+  
+  .signup-form-container h3 {
+    font-size: 1.5rem;
+  }
+}
+/* ==================== ChatBot Component Styles ==================== */
+
+/* Chat Icon Container */
+.chat-icon-container {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.chat-icon-wrapper {
+  position: relative;
+  width: 65px;
+  height: 65px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  animation: pulse-icon 2s infinite;
+}
+
+.chat-icon-wrapper:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+}
+
+.chat-icon {
+  width: 35px;
+  height: 35px;
+  filter: brightness(0) invert(1);
+}
+
+.chat-icon-badge {
   position: absolute;
-  border: 2px solid black;
-  background-color: white;
-  border-radius: 10px;
-  padding: 10px;
-  right: 0px;
-  top: 50px;
-  width: 450px;
-  z-index: 100;
-}
-
-.cart-quantity {
-  display: flex;
-}
-
-.cart-quantity span {
-  padding: 5px 10px;
-  border: 1px solid black;
-}
-
-.cart button {
-  padding: 5px;
-  border-radius: 10px;
-  background-color: lightcoral;
-  margin-top: 10px;
-}
-
-/* -----------------------------------  */
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  width: 250px;
-  margin: auto;
-}
-
-.login-input {
-  padding: 0.5rem;
-  border: 2px solid purple;
-  border-radius: 6px;
-  outline: none;
-}
-
-.login-input:focus {
-  border-color: orange;
-}
-
-.login-btn {
-  padding: 0.6rem;
-  background: purple;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.login-btn:hover {
-  background: orange;
-}
-
-
-.signup-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-}
-
-.signup-input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.signup-btn {
-  background: black;
+  top: -5px;
+  right: -5px;
+  background: #28a745;
   color: white;
-  padding: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border: 3px solid white;
+  animation: bounce 2s infinite;
+}
+
+@keyframes pulse-icon {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 30px rgba(102, 126, 234, 0.8);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Chat Window */
+.chat-window {
+  position: fixed;
+  bottom: 105px;
+  right: 25px;
+  width: 380px;
+  max-height: 550px;
+  border-radius: 16px;
+  overflow: hidden;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  animation: slideUp 0.3s ease-out;
+  border: 1px solid #e0e0e0;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Chat Header */
+.chat-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-header-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.chat-status {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: #28a745;
+  border-radius: 50%;
+  display: inline-block;
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.chat-close-btn {
+  background: rgba(255, 255, 255, 0.2);
   border: none;
-  border-radius: 4px;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chat-close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+/* Chat Body */
+.chat-body {
+  flex: 1;
+  overflow-y: auto;
+  background: #f8f9fa;
+  padding: 1rem;
+  min-height: 0;
+}
+
+/* Empty State */
+.chat-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem 1rem;
+}
+
+/* User Form */
+.chat-user-form {
+  padding: 1rem 0;
+}
+
+.chat-user-form .input-group-text {
+  background: #f8f9fa;
+  border-right: none;
+}
+
+.chat-user-form .form-control {
+  border-left: none;
+}
+
+.chat-user-form .form-control:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+/* Messages */
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.message {
+  padding: 0.625rem 0.875rem;
+  border-radius: 12px;
+  max-width: 75%;
+  word-wrap: break-word;
+  line-height: 1.4;
+  font-size: 0.9rem;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.user-msg {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.bot-msg {
+  background: white;
+  color: #333;
+  border: 1px solid #e0e0e0;
+  border-bottom-left-radius: 4px;
+}
+
+.chat-welcome-message {
+  animation: fadeIn 0.5s ease-in;
+}
+
+/* Chat Footer */
+.chat-footer {
+  padding: 1rem;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+}
+
+.chat-input {
+  border-radius: 20px 0 0 20px;
+  border-right: none;
+  padding: 0.625rem 1rem;
+}
+
+.chat-input:focus {
+  border-color: #667eea;
+  box-shadow: none;
+}
+
+.chat-send-btn {
+  border-radius: 0 20px 20px 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  padding: 0 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.chat-send-btn:hover:not(:disabled) {
+  transform: translateX(2px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+.chat-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+
+/* ==================== ChatBot Responsive Design ==================== */
+
+/* Tablets and Medium Devices */
+@media (max-width: 991px) {
+  .chat-icon-container {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .chat-icon-wrapper {
+    width: 60px;
+    height: 60px;
+  }
+
+  .chat-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .chat-window {
+    width: 350px;
+    max-height: 500px;
+    bottom: 95px;
+    right: 20px;
+  }
+}
+
+/* Small Tablets and Large Phones */
+@media (max-width: 768px) {
+  .chat-icon-container {
+    bottom: 15px;
+    right: 15px;
+  }
+
+  .chat-icon-wrapper {
+    width: 55px;
+    height: 55px;
+  }
+
+  .chat-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .chat-icon-badge {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    border-width: 2px;
+  }
+
+  .chat-window {
+    width: calc(100vw - 30px);
+    max-width: 400px;
+    max-height: 70vh;
+    bottom: 85px;
+    right: 15px;
+  }
+
+  .chat-header {
+    padding: 0.875rem;
+  }
+
+  .chat-header-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+  }
+
+  .chat-header strong {
+    font-size: 0.95rem;
+  }
+
+  .chat-status {
+    font-size: 0.7rem;
+  }
+
+  .chat-body {
+    padding: 0.875rem;
+  }
+
+  .chat-footer {
+    padding: 0.875rem;
+  }
+}
+
+/* Mobile Phones */
+@media (max-width: 576px) {
+  .chat-icon-container {
+    bottom: 15px;
+    right: 15px;
+    z-index: 1000;
+  }
+
+  .chat-icon-wrapper {
+    width: 50px;
+    height: 50px;
+  }
+
+  .chat-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .chat-icon-badge {
+    width: 18px;
+    height: 18px;
+    font-size: 9px;
+    top: -3px;
+    right: -3px;
+  }
+
+  /* Full Screen Chat on Mobile */
+  .chat-window {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    z-index: 9999;
+  }
+
+  .chat-header {
+    padding: 1rem;
+    border-radius: 0;
+  }
+
+  .chat-header strong {
+    font-size: 1rem;
+  }
+
+  .chat-body {
+    padding: 0.75rem;
+    flex: 1;
+  }
+
+  /* Messages adjustments */
+  .message {
+    max-width: 80%;
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .message-avatar {
+    width: 26px;
+    height: 26px;
+    font-size: 0.7rem;
+  }
+
+  /* Empty state adjustments */
+  .chat-empty-state {
+    padding: 1.5rem 1rem;
+  }
+
+  .chat-empty-state i {
+    font-size: 2.5rem !important;
+  }
+
+  .chat-empty-state h6 {
+    font-size: 0.95rem;
+  }
+
+  .chat-empty-state p {
+    font-size: 0.85rem;
+  }
+
+  /* User form adjustments */
+  .chat-user-form {
+    padding: 0.75rem 0;
+  }
+
+  .chat-user-form i {
+    font-size: 2.5rem !important;
+  }
+
+  .chat-user-form h6 {
+    font-size: 0.95rem;
+  }
+
+  .chat-user-form p {
+    font-size: 0.85rem;
+  }
+
+  .chat-user-form .form-label {
+    font-size: 0.85rem;
+  }
+
+  /* Footer adjustments */
+  .chat-footer {
+    padding: 0.75rem;
+  }
+
+  .chat-input {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.875rem;
+  }
+
+  .chat-send-btn {
+    padding: 0 1rem;
+  }
+
+  .chat-footer small {
+    font-size: 0.75rem;
+  }
+}
+
+/* Very Small Phones */
+@media (max-width: 400px) {
+  .chat-icon-wrapper {
+    width: 48px;
+    height: 48px;
+  }
+
+  .chat-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .chat-header {
+    padding: 0.875rem;
+  }
+
+  .chat-header strong {
+    font-size: 0.9rem;
+  }
+
+  .chat-close-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
+
+  .message {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.7rem;
+  }
+
+  .message-avatar {
+    width: 24px;
+    height: 24px;
+    font-size: 0.65rem;
+  }
+
+  
+  .chat-input {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .chat-send-btn {
+    padding: 0 0.875rem;
+  }
+}
+
+/* Landscape Mode on Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .chat-window {
+    height: 100vh;
+    max-height: 100vh;
+  }
+
+  .chat-body {
+    max-height: calc(100vh - 140px);
+  }
+}
+
+/* High DPI Displays (Retina) */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .chat-icon {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* Scrollbar Styling for Mobile */
+@media (max-width: 576px) {
+  .chat-body::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .chat-body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .chat-body::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 2px;
+  }
+}
+
+/* Safe Area for iOS Notch */
+@supports (padding: max(0px)) {
+  @media (max-width: 576px) {
+    .chat-window {
+      padding-bottom: max(0px, env(safe-area-inset-bottom));
+    }
+
+    .chat-footer {
+      padding-bottom: max(0.75rem, calc(0.75rem + env(safe-area-inset-bottom)));
+    }
+  }
+}
+
+/* Prevent body scroll when chat is open on mobile */
+@media (max-width: 576px) {
+  body.chat-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+}
+
+
+/* ------------------------  chat bot css end ------------ */
+.user-account-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 2rem 0;
+}
+
+.account-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.account-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-avatar {
+  font-size: 3rem;
+  color: #333;
+}
+
+.account-content {
+  display: flex;
+  min-height: 600px;
+}
+
+.account-sidebar {
+  width: 300px;
+  background-color: #fafafa;
+  padding: 1.5rem;
+  border-right: 1px solid #e0e0e0;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-item i {
+  font-size: 1.5rem;
+}
+
+.sidebar-item:hover {
+  background-color: #f0f0f0;
+}
+
+.sidebar-item.active {
+  background-color: #000;
+  color: white;
+}
+
+.account-main {
+  flex: 1;
+  padding: 2rem;
+}
+
+.profile-section {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.profile-section:last-of-type {
+  border-bottom: none;
+}
+
+/* Orders Styling */
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.order-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #fafafa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.order-items {
+  padding: 1rem 1.5rem;
+}
+
+
+/* ------------------------*/
+
+.user-account-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 2rem 0;
+}
+
+.account-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.account-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-avatar {
+  font-size: 3rem;
+  color: #333;
+}
+
+.account-content {
+  display: flex;
+  min-height: 600px;
+}
+
+.account-sidebar {
+  width: 300px;
+  background-color: #fafafa;
+  padding: 1.5rem;
+  border-right: 1px solid #e0e0e0;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.sidebar-item i {
+  font-size: 1.5rem;
+}
+
+.sidebar-item:hover {
+  background-color: #f0f0f0;
+}
+
+
+.filter-sidebar {
+  position: sticky;
+  top: 20px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+.filter-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.filter-section:last-of-type {
+  border-bottom: none;
+}
+
+.filter-title {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 1rem;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-check {
+  margin-bottom: 0.75rem;
+}
+
+.form-check-label {
+  font-size: 14px;
+  color: #666;
   cursor: pointer;
 }
 
-.error {
-  color: red;
-  font-size: 0.9rem;
+
+
+.thumbnail-img {
+  width: 80px;
+  height: 100px;
+  object-fit: cover;
+  border: 2px solid #e0e0e0;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
+
+.thumbnail-img:hover {
+  border-color: #000;
+}
+
+.thumbnail-img.active {
+  border-color: #000;
+}
+
+/* Product Details */
+.product-title {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.current-price {
+  font-size: 28px;
+  font-weight: 700;
+  color: #000;
+}
+
+.original-price {
+  font-size: 18px;
+}
+
+.discount-badge {
+  background: #ff4757;
+  color: white;
+  padding: 4px 8px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+/* Size Selection */
+.size-btn {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #ccc;
+  background: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.size-btn:hover {
+  border-color: #000;
+}
+
+.size-btn.active {
+  border: 2px solid #000;
+  background: #000;
+  color: white;
+}
+
+/* Quantity Selector */
+.quantity-selector {
+  background: white;
+}
+
+.qty-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.qty-btn:hover {
+  background: #f5f5f5;
+}
+
+.qty-value {
+  width: 50px;
+  text-align: center;
+  font-weight: 600;
+  border-left: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
+  padding: 8px 0;
+}
+
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Offer Banner */
+.offer-banner {
+  background: #fff3cd;
+  padding: 12px 1.5rem;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+
+
+.payment-icons img {
+  height: 30px;
+  object-fit: contain;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .cart-sidebar {
+    width: 100%;
+    right: -100%;
+  }
+
+  .cart-sidebar.open {
+    right: 0;
+  }
+}
+
+
+/* Delivery Section */
+.delivery-section {
+  background: #f9f9f9;
+}
+
+/* Offers */
+.offer-item {
+  padding: 8px 12px;
+  background: #fff3cd;
+  border-left: 3px solid #ffc107;
+}
+
+/* Product Tabs */
+.tabs-header {
+  display: flex;
+  gap: 2rem;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 12px 0;
+  font-weight: 500;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+  color: #000;
+}
+
+.tab-btn.active {
+  color: #000;
+  border-bottom-color: #000;
+}
+
+.tab-pane {
+  color: #666;
+  line-height: 1.8;
+}
+
+/* Seller Info */
+.seller-info {
+  border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .product-title {
+    font-size: 20px;
+  }
+
+  .current-price {
+    font-size: 24px;
+  }
+
+  .size-btn {
+    width: 45px;
+    height: 45px;
+  }
+
+  .tabs-header {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .tab-btn {
+    text-align: left;
+    padding: 10px 0;
+  }
+}
+
+
+/* ---------------------------------------------------------------------- chat bot end  */
 
 @media (max-width:768px) {
   .button {
     display: none !important
+  }
+}
+
+
+
+
+/* ---------------------------------------------------  updated css  */
+
+/* ================================================
+   CARD COMPONENT STYLES
+   Component: Card.jsx
+   ================================================ */
+
+/* ==================== Products Grid (Auto-Fill) ==================== */
+
+/* Grid with Auto-Fill - Creates as many columns as fit */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+/* When Filter Sidebar is Open */
+.col-md-9 .products-grid {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1400px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+
+  .col-md-9 .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+}
+
+@media (max-width: 991px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .col-md-9 .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.875rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.75rem;
+  }
+}
+
+/* @media (max-width: 400px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+} */
+
+/* Product Card Base */
+.product-card {
+  width: 100%;
+  max-width: 100%;
+  /* Ensures card stays within grid cell */
+  border: 2px solid transparent;
+  padding: 10px 10px 20px 10px;
+  border-image: repeating-linear-gradient(45deg,
+      black 0 10px,
+      transparent 10px 20px) 10;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Ensure image maintains aspect ratio in grid */
+.product-card-img-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Image Container */
+.product-card-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+
+.product-card-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-card-img-wrapper img {
+  transform: scale(1.05);
+}
+
+/* No Image Placeholder */
+.no-image-text {
+  color: #999;
+  font-size: 14px;
+}
+
+/* Navigation Arrows (Left/Right) */
+.product-card-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 18px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.product-card:hover .product-card-icon {
+  opacity: 1;
+}
+
+.product-card-icon:hover {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product-card-icon-left {
+  left: 10px;
+}
+
+.product-card-icon-right {
+  right: 10px;
+}
+
+/* Wishlist Heart Icon */
+.wishlist-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 3;
+}
+
+.product-card:hover .wishlist-icon {
+  opacity: 1;
+}
+
+.wishlist-icon i {
+  font-size: 20px;
+  color: #000;
+  transition: all 0.3s ease;
+}
+
+.wishlist-icon:hover {
+  transform: scale(1.1);
+}
+
+.wishlist-icon .bi-heart-fill {
+  color: #ff4757;
+}
+
+.wishlist-icon:hover i {
+  color: #ff4757;
+}
+
+/* Quick View Button */
+.quick-view-btn {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: #000;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 3;
+  white-space: nowrap;
+}
+
+.product-card:hover .quick-view-btn {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.quick-view-btn:hover {
+  background: #333;
+}
+
+/* Product Content Area */
+.product-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Brand Name */
+.brand-name {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Product Name */
+.product-name {
+  font-size: 16px;
+  margin-bottom: 1rem;
+}
+
+/* Text Truncation */
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
+}
+
+/* Pricing */
+.current-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000;
+}
+
+.actual-price {
+  font-size: 14px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.discount-tag {
+  font-size: 12px;
+  color: rgb(218, 0, 105);
+  font-weight: 600;
+}
+
+
+.cart-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+  cursor: pointer;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* ==================== Cart Sidebar Component Styles ==================== */
+
+/* Backdrop Overlay */
+.cart-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+  cursor: pointer;
+}
+
+/* Cart Sidebar Container */
+.cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: -450px;
+  width: 450px;
+  height: 100vh;
+  background: white;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1050;
+  transition: right 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-sidebar.open {
+  right: 0;
+}
+
+/* Cart Header */
+.cart-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f8f9fa;
+}
+
+/* Cart Items Container */
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+/* Individual Cart Item */
+.cart-item {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+/* Cart Item Image */
+.cart-item-image {
+  width: 100px;
+  height: 120px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+}
+
+.cart-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Product Details in Cart */
+.cart-item .product-brand {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.cart-item .product-name {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.cart-item .product-size {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.cart-item .product-price {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0;
+}
+
+/* Quantity Control */
+.quantity-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+}
+
+.qty-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  transition: color 0.2s ease;
+  line-height: 1;
+}
+
+.qty-btn:hover {
+  color: #000;
+}
+
+.qty-btn:active {
+  transform: scale(0.95);
+}
+
+.qty-value {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #000;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Empty Cart State */
+.empty-cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Cart Footer */
+.cart-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  background: white;
+}
+
+/* Scrollbar Styling */
+.cart-items::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cart-items::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.cart-items::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.cart-items::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+  .cart-sidebar {
+    right: -100%;
+    width: 100%;
+  }
+
+  .cart-sidebar.open {
+    right: 0;
+  }
+
+  .cart-header {
+    padding: 1rem;
+  }
+
+  .cart-item-image {
+    width: 80px;
+    height: 100px;
+  }
+
+  .cart-items {
+    padding: 0.75rem;
+  }
+
+  .cart-item {
+    padding: 1rem 0;
+  }
+
+  .cart-footer {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) and (min-width: 577px) {
+  .cart-sidebar {
+    width: 380px;
+    right: -380px;
+  }
+
+  .cart-sidebar.open {
+    right: 0;
+  }
+}
+
+/* ==================== Cart Sidebar Component Styles end ==================== */
+
+/* Add to Cart Button */
+.add-to-cart-btn {
+  background: #000;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.add-to-cart-btn:hover {
+  background: #333;
+}
+
+/* Responsive Optimizations for Small Screens */
+@media (max-width: 768px) {
+  .add-to-cart-btn {
+    padding: 7px 12px;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+  }
+}
+
+@media (max-width: 576px) {
+
+  /* Stack price and button vertically on very small screens */
+  .product-card-content .d-flex.justify-content-between.align-items-center {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 0.75rem;
+  }
+
+  .add-to-cart-btn {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* Adjust pricing section */
+  .product-card-content .d-flex.flex-column {
+    width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .add-to-cart-btn {
+    padding: 9px 14px;
+    font-size: 11px;
+  }
+
+  /* Make price and discount tag smaller */
+  .current-price {
+    font-size: 18px;
+  }
+
+  .actual-price {
+    font-size: 13px;
+  }
+
+  .discount-tag {
+    font-size: 11px;
+  }
+}
+
+/* Alternative: Icon-only button on very small cards */
+@media (max-width: 576px) {
+
+  /* Option 2: Show cart icon instead of full text */
+  .add-to-cart-btn.icon-only {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .add-to-cart-btn.icon-only::before {
+    content: '\f291';
+    /* Bootstrap cart icon */
+    font-family: 'bootstrap-icons';
+  }
+
+  .add-to-cart-btn.icon-only span {
+    display: none;
   }
 }
