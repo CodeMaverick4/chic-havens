@@ -3,8 +3,9 @@ import { useDispatch } from "react-redux";
 import { login } from "../redux/slices/authReducer";
 import axios from "axios";
 import { toggleModal } from "../redux/slices/modalReducer";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
 import { ref, get, push, set } from "firebase/database";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginForm = () => {
     const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const LoginForm = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
 
+        // Validation
         const newErrors = {};
         if (!email) newErrors.email = "Email is required";
         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
@@ -51,50 +53,72 @@ const LoginForm = () => {
 
         try {
             setLoading(true);
-            const API_KEY = import.meta.env.VITE_APIKEY;
 
-            const res = await axios.post(
-                `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`,
-                { email, password, returnSecureToken: true }
+            // Sign in with Firebase SDK
+            const userCredential = await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
             );
 
-            const uid = res.data.localId;
-            const token = res.data.idToken;
+            const uid = userCredential.user.uid;
+            const userEmail = userCredential.user.email;
 
+            console.log("✅ User logged in:", uid);
+
+            // Check if user has a chatId
             const userRef = ref(db, `users/${uid}`);
             const snapshot = await get(userRef);
 
             let chatId;
 
             if (snapshot.exists() && snapshot.val().chatId) {
+                // User already has a chat
                 chatId = snapshot.val().chatId;
+                console.log("✅ Existing chat found:", chatId);
             } else {
+                // Create new chat for existing user
                 const newChatRef = push(ref(db, "chic-havens-enquiries"));
                 chatId = newChatRef.key;
 
+                console.log("📝 Creating new chat:", chatId);
+
                 await set(ref(db, `chic-havens-enquiries/${chatId}`), {
-                    user: { uid, email, createdAt: Date.now() },
+                    user: {
+                        uid,
+                        email: userEmail,
+                        createdAt: Date.now(),
+                    },
                     messages: {},
                 });
 
-                await set(userRef, {
-                    email,
+                await set(ref(db, `users/${uid}`), {
+                    email: userEmail,
                     chatId,
                     createdAt: Date.now(),
                 });
+
+                console.log("✅ New chat created");
             }
 
-            const user = { uid, email, token, chatId };
+            // Login user
+            const user = {
+                uid,
+                email: userEmail,
+                token: await userCredential.user.getIdToken(),
+                chatId,
+            };
+
             dispatch(login(user));
             dispatch(toggleModal(null));
-
             setPassword("");
             setEmail("");
             setErrors({});
+
         } catch (err) {
-            console.error("Login error:", err);
+            console.error("❌ Login error:", err);
             setErrors({
-                general: err.response?.data?.error?.message || "Invalid credentials. Please try again.",
+                general: err.message || "Invalid credentials. Please try again.",
             });
         } finally {
             setLoading(false);
@@ -156,7 +180,7 @@ const LoginForm = () => {
                             }}
                             disabled={loading}
                         />
-                        <span 
+                        <span
                             className="input-group-text bg-light border-start-0 cursor-pointer"
                             onClick={() => setShowPassword(!showPassword)}
                         >
@@ -180,8 +204,8 @@ const LoginForm = () => {
                 )}
 
                 {/* Login Button */}
-                <button 
-                    type="submit" 
+                <button
+                    type="submit"
                     className="btn btn-primary w-100 py-2 fw-semibold mb-3"
                     disabled={loading}
                 >

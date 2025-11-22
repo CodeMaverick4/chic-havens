@@ -1,1 +1,0 @@
-export const ORDERS_API_URL = 'https://todo-app-75d12-default-rtdb.firebaseio.com/travel-db/orders'

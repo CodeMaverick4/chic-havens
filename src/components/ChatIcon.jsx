@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
 import { db } from "../firebase";
 import { ref, push, onChildAdded, update, get, query, orderByKey } from "firebase/database";
 
@@ -28,43 +27,62 @@ const ChatBot = ({ user }) => {
     }
 
     setChatId(user.chatId || null);
-    setName(user.name || "");
-    setPhone(user.phone || "");
     setMessages([]);
-    setNeedUserDetails(false);
+
+    // Check user details
+    if (user.chatId) {
+      checkUserDetails(user.chatId);
+    } else {
+      setNeedUserDetails(true);
+    }
   }, [user]);
 
-  // Check chat existence & messages
-  useEffect(() => {
-    if (!chatId) return;
+  // Check if user has name and phone
+  const checkUserDetails = async (chatId) => {
+    try {
+      const chatRef = ref(db, `chic-havens-enquiries/${chatId}/user`);
+      const snapshot = await get(chatRef);
 
-    const chatRef = ref(db, `chic-havens-enquiries/${chatId}`);
-    get(chatRef).then((snapshot) => {
       if (snapshot.exists()) {
-        const chatData = snapshot.val();
-        if (!chatData.messages || Object.keys(chatData.messages).length === 0) {
+        const userData = snapshot.val();
+
+        if (userData.name && userData.phone) {
+          // User has provided details
+          setName(userData.name);
+          setPhone(userData.phone);
+          setNeedUserDetails(false);
+        } else {
+          // User details incomplete
+          setName(userData.name || "");
+          setPhone(userData.phone || "");
           setNeedUserDetails(true);
-          setName(chatData.user?.name || "");
-          setPhone(chatData.user?.phone || "");
         }
       } else {
+        // No user data found
         setNeedUserDetails(true);
       }
-    });
-  }, [chatId]);
+    } catch (err) {
+      console.error("Error checking user details:", err);
+      setNeedUserDetails(true);
+    }
+  };
 
-  // Listen for messages
+  // Listen for messages ONLY after user details are complete
   useEffect(() => {
-    if (!chatId) return;
+    if (!chatId || needUserDetails) return;
 
-    const messagesRef = query(ref(db, `chic-havens-enquiries/${chatId}/messages`), orderByKey());
+    const messagesRef = query(
+      ref(db, `chic-havens-enquiries/${chatId}/messages`),
+      orderByKey()
+    );
+
     const unsubscribe = onChildAdded(messagesRef, (snapshot) => {
       const msg = snapshot.val();
       setMessages((prev) => [...prev, msg]);
     });
 
     return () => unsubscribe();
-  }, [chatId]);
+  }, [chatId, needUserDetails]);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -73,13 +91,12 @@ const ChatBot = ({ user }) => {
     }
   }, [messages]);
 
-  // Save user details with validation
   const handleSaveUserDetails = async () => {
     if (name.trim().length < 3 || name.trim().length > 50) {
       return alert("Name must be between 3 and 50 characters.");
     }
 
-    const phonePattern = /^[0-9]{10}$/; // exactly 10 digits
+    const phonePattern = /^[0-9]{10}$/;
     if (!phonePattern.test(phone)) {
       return alert("Phone number must be 10 digits.");
     }
@@ -87,34 +104,86 @@ const ChatBot = ({ user }) => {
     setLoading(true);
 
     try {
-      const chatUserRef = ref(db, `chic-havens-enquiries/${chatId}/user`);
-      await update(chatUserRef, { name, phone });
+      console.log("Saving user details...");
+      console.log("ChatId:", chatId);
+      console.log("User UID:", user.uid);
+      console.log("Name:", name.trim());
+      console.log("Phone:", phone);
 
+      // Update chat user info
+      const chatUserRef = ref(db, `chic-havens-enquiries/${chatId}/user`);
+      console.log("Updating chat user ref:", chatUserRef.toString());
+
+      await update(chatUserRef, {
+        name: name.trim(),
+        phone
+      });
+      console.log("✅ Chat user updated");
+
+      // Update users node
       const userRef = ref(db, `users/${user.uid}`);
-      await update(userRef, { displayName: name, phone });
+      console.log("Updating user ref:", userRef.toString());
+
+      await update(userRef, {
+        name: name.trim(),
+        phone
+      });
+      console.log("✅ User profile updated");
 
       setNeedUserDetails(false);
-    } catch (err) {
-      console.error("Error updating user details:", err);
-    }
+      alert("Details saved successfully!");
 
-    setLoading(false);
+    } catch (err) {
+      console.error("❌ Error updating user details:", err);
+      console.error("Error code:", err.code);
+      console.error("Error message:", err.message);
+      alert(`Failed to save details: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   // Send message with validation
   const handleSend = async () => {
-    if (!input.trim() || !user || !chatId) return;
-    if (input.length > 200) return alert("Message cannot exceed 200 characters.");
+  if (!input.trim() || !user || !chatId) {
+    console.log("❌ Cannot send - missing data:", {
+      hasInput: !!input.trim(),
+      hasUser: !!user,
+      hasChatId: !!chatId
+    });
+    return;
+  }
+  
+  if (input.length > 200) {
+    return alert("Message cannot exceed 200 characters.");
+  }
 
+  try {
+    console.log("📤 Sending message...");
+    console.log("ChatId:", chatId);
+    console.log("Message:", input.trim());
+    
     const messagesRef = ref(db, `chic-havens-enquiries/${chatId}/messages`);
+    console.log("Messages ref:", messagesRef.toString());
+    
     await push(messagesRef, {
       text: input.trim(),
       sender: "user",
       timestamp: Date.now(),
     });
-
+    
+    console.log("✅ Message sent successfully");
     setInput("");
-  };
+    
+  } catch (err) {
+    console.error("❌ Error sending message:", err);
+    console.error("Error code:", err.code);
+    console.error("Error message:", err.message);
+    alert(`Failed to send message: ${err.message}`);
+  }
+};
+
 
   return (
     <>
@@ -246,10 +315,10 @@ const ChatBot = ({ user }) => {
 
                     return (
                       // <div key={idx} className={`border message-wrapper ${msg.sender === "user" ? "user-wrapper" : "bot-wrapper" }`}>
-                          <div key={idx} className={`d-flex flex-column w-100 ${msg.sender === 'admin' ? 'align-items-start' : 'align-items-end'} `}>
-                            <div className={`message ${msg.sender === "user" ? "user-msg" : "bot-msg"}`}> {msg.text} </div>
-                            <small style={{fontSize:'8px'}}>{formatedDate.toLocaleString()}</small>
-                          </div>                          
+                      <div key={idx} className={`d-flex flex-column w-100 ${msg.sender === 'admin' ? 'align-items-start' : 'align-items-end'} `}>
+                        <div className={`message ${msg.sender === "user" ? "user-msg" : "bot-msg"}`}> {msg.text} </div>
+                        <small style={{ fontSize: '8px' }}>{formatedDate.toLocaleString()}</small>
+                      </div>
                       // </div>
                     )
                   })

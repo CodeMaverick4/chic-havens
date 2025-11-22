@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import { ORDERS_API_URL } from '../utils/api-constant';
+// import { ORDERS_API_URL } from '../utils/api-constant';
 import { setCartItems } from '../redux/slices/cartReducer';
 
 const Checkout = () => {
@@ -84,7 +84,7 @@ const Checkout = () => {
     };
 
     try {
-      const response = await axios.post(`${ORDERS_API_URL}.json`, orderData);
+      const response = await axios.post(`${import.meta.env.VITE_DATABASEURL}/orders.json`, orderData);
       
       // Clear cart
       localStorage.removeItem('cart');

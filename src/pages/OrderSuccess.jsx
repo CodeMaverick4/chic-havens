@@ -1,9 +1,9 @@
 // import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { ORDERS_API_URL } from '../utils/api-constant';
+
 import { useNavigate, useParams } from 'react-router';
-// import { ORDERS_API_URL } from '../utils/api-constants';
+
 
 const OrderSuccess = () => {
   const { orderId } = useParams();
@@ -13,7 +13,7 @@ const OrderSuccess = () => {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const response = await axios.get(`${ORDERS_API_URL}/${orderId}.json`);
+        const response = await axios.get(`${import.meta.env.VITE_DATABASEURL}/${orderId}.json`);
         setOrder(response.data);
       } catch (err) {
         console.error(err);

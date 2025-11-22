@@ -3,8 +3,9 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/slices/authReducer";
 import { closeModal, toggleModal } from "../redux/slices/modalReducer";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
 import { ref, set, push } from "firebase/database";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const SignUpForm = () => {
     const dispatch = useDispatch();
@@ -44,73 +45,93 @@ const SignUpForm = () => {
     };
 
     const handleSignUp = async (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        // Validate all fields before submit
-        const newErrors = {};
-        if (!form.email) newErrors.email = "Email is required";
-        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-            newErrors.email = "Invalid email format";
+    // Validation
+    const newErrors = {};
+    if (!form.email) newErrors.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+      newErrors.email = "Invalid email format";
 
-        if (!form.password) newErrors.password = "Password is required";
-        else if (form.password.length < 6)
-            newErrors.password = "Password must be at least 6 characters";
+    if (!form.password) newErrors.password = "Password is required";
+    else if (form.password.length < 6)
+      newErrors.password = "Password must be at least 6 characters";
 
-        if (!form.confirm) newErrors.confirm = "Confirm your password";
-        else if (form.confirm !== form.password)
-            newErrors.confirm = "Passwords do not match";
+    if (!form.confirm) newErrors.confirm = "Confirm your password";
+    else if (form.confirm !== form.password)
+      newErrors.confirm = "Passwords do not match";
 
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-            return;
-        }
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
 
-        try {
-            setLoading(true);
-            const API_KEY = import.meta.env.VITE_APIKEY;
-            const res = await axios.post(
-                `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
-                { email: form.email, password: form.password, returnSecureToken: true }
-            );
+    try {
+      setLoading(true);
+      
+      // Create user with Firebase SDK (NOT REST API)
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        form.email,
+        form.password,
+        
+      );
 
-            const uid = res.data.localId;
-            const email = res.data.email;
+      const uid = userCredential.user.uid;
+      const email = userCredential.user.email;
 
-            // Create a new chat for this user
-            const newChatRef = push(ref(db, "chic-havens-enquiries"));
-            const newChatId = newChatRef.key;
+      console.log("✅ User created:", uid);
 
-            await set(ref(db, `chic-havens-enquiries/${newChatId}`), {
-                user: { uid, email, createdAt: Date.now() },
-                messages: {},
-            });
+      // Create chat entry with proper ID
+      const newChatRef = push(ref(db, "chic-havens-enquiries"));
+      const newChatId = newChatRef.key; // This generates a unique ID like "-OblSazp..."
 
-            await set(ref(db, `users/${uid}`), {
-                email,
-                chatId: newChatId,
-                createdAt: Date.now(),
-            });
+      console.log("📝 Creating chat with ID:", newChatId);
 
-            const user = {
-                uid,
-                email,
-                token: res.data.idToken,
-                chatId: newChatId,
-            };
+      await set(ref(db, `chic-havens-enquiries/${newChatId}`), {
+        user: {
+          uid,
+          email,
+          createdAt: Date.now(),
+          role: "customer",
+        },
+        messages: {},
+      });
 
-            dispatch(login(user));
-            setForm({ email: "", password: "", confirm: "" });
-            dispatch(closeModal());
-            setErrors({});
-        } catch (err) {
-            console.error("Signup error:", err);
-            setErrors({
-                general: err.response?.data?.error?.message || "Signup failed. Please try again.",
-            });
-        } finally {
-            setLoading(false);
-        }
-    };
+      console.log("✅ Chat created");
+
+      // Create user profile
+      await set(ref(db, `users/${uid}`), {
+        email,
+        chatId: newChatId,  // ← Store the chat ID here
+        createdAt: Date.now(),
+      });
+
+      console.log("✅ User profile created");
+
+      // Login user
+      const user = {
+        uid,
+        email,
+        token: await userCredential.user.getIdToken(),
+        chatId: newChatId,  // ← Pass the chat ID to Redux
+      };
+
+      dispatch(login(user));
+      setForm({ email: "", password: "", confirm: "" });
+      dispatch(closeModal());
+      setErrors({});
+
+    } catch (err) {
+      console.error("❌ Signup error:", err);
+      setErrors({
+        general: err.message || "Signup failed. Please try again.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
     return (
         <div className="signup-form-container">

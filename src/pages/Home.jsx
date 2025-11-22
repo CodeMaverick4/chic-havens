@@ -28,8 +28,9 @@ const Home = () => {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `${import.meta.env.VITE_DATABASEURL}/travel-db/products.json`
+        `${import.meta.env.VITE_DATABASEURL}/main-database/products.json`
       );
+      console.log(response)
       let arr = [];
       for (let key in response.data) {
         arr.push({ ...response.data[key], id: key });
