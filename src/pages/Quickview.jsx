@@ -26,7 +26,7 @@ const QuickView = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_DATABASEURL}/travel-db/products/${productId}.json`
+        `${import.meta.env.VITE_DATABASEURL}/main-database/products/${productId}.json`
       );
       setProduct(response.data);
     } catch (err) {

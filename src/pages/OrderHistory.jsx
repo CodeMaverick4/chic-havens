@@ -12,7 +12,7 @@ const OrderHistory = () => {
   const loadOrders = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${import.meta.env.VITE_DATABASEURL}/travel-db/orders.json`);
+      const response = await axios.get(`${import.meta.env.VITE_DATABASEURL}/main-database/orders.json`);
       let ordersArray = [];
       for (let key in response.data) {
         if (response.data[key].userId === auth.uid) {
