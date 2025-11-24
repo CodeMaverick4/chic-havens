@@ -84,7 +84,7 @@ const Checkout = () => {
     };
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_DATABASEURL}/orders.json`, orderData);
+      const response = await axios.post(`${import.meta.env.VITE_DATABASEURL}/main-database/orders.json`, orderData);
       
       // Clear cart
       localStorage.removeItem('cart');

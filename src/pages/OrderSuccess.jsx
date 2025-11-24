@@ -13,7 +13,7 @@ const OrderSuccess = () => {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_DATABASEURL}/${orderId}.json`);
+        const response = await axios.get(`${import.meta.env.VITE_DATABASEURL}/main-database/orders/${orderId}.json`);
         setOrder(response.data);
       } catch (err) {
         console.error(err);
